@@ -4,6 +4,10 @@ public class ViewModel {
     private String title;
     private String country;
 
+    public ViewModel(String data, String country) {
+
+    }
+
     public String getTitle() {
         return title;
     }
