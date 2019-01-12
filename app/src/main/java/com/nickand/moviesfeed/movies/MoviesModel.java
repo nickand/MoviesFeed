@@ -19,7 +19,6 @@ public class MoviesModel implements MoviesMVP.Model {
             new BiFunction<Result, String, ViewModel>() {
                 @Override
                 public ViewModel apply(Result result, String country) {
-                    //TODO change result.toString when the data POJO is created
                     return new ViewModel(result.getTitle(), country);
                 }
             });
