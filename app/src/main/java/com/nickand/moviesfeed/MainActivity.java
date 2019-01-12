@@ -1,11 +1,13 @@
 package com.nickand.moviesfeed;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import com.nickand.moviesfeed.movies.ListAdapter;
@@ -36,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements MoviesMVP.View {
 
     private ListAdapter listAdapter;
     private List<ViewModel> resultList = new ArrayList<>();
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,12 +64,22 @@ public class MainActivity extends AppCompatActivity implements MoviesMVP.View {
     }
 
     @Override
-    public void updateData(ViewModel viewModel) {
+    protected void onStop() {
+        super.onStop();
+        presenter.rxUnsubscribe();
+        resultList.clear();
+        listAdapter.notifyDataSetChanged();
+    }
 
+    @Override
+    public void updateData(ViewModel viewModel) {
+        resultList.add(viewModel);
+        listAdapter.notifyItemChanged(resultList.size() - 1);
+        Log.d(TAG, "New info: "+viewModel.getTitle());
     }
 
     @Override
     public void showSnackbar(String message) {
-
+        Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show();
     }
 }
