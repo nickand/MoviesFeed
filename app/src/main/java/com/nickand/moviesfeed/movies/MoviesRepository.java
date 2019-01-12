@@ -72,7 +72,7 @@ public class MoviesRepository implements Repository {
 
     @Override
     public Observable<Result> getResultData() {
-        return null;
+        return getResultFromCache().switchIfEmpty(getResultFromNetwork());
     }
 
     @Override
@@ -109,6 +109,6 @@ public class MoviesRepository implements Repository {
 
     @Override
     public Observable<String> getCountryData() {
-        return null;
+        return getCountryFromCache().switchIfEmpty(getCountryFromNetwork());
     }
 }
