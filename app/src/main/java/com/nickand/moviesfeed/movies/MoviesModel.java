@@ -7,9 +7,9 @@ import io.reactivex.functions.BiFunction;
 
 public class MoviesModel implements MoviesMVP.Model {
 
-    private MovieRepository repository;
+    private Repository repository;
 
-    public MoviesModel(MovieRepository repository) {
+    public MoviesModel(Repository repository) {
         this.repository = repository;
     }
 
