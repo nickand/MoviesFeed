@@ -20,7 +20,7 @@ public class MoviesModel implements MoviesMVP.Model {
                 @Override
                 public ViewModel apply(Result result, String country) {
                     //TODO change result.toString when the data POJO is created
-                    return new ViewModel(result.toString(), country);
+                    return new ViewModel(result.getTitle(), country);
                 }
             });
 
