@@ -2,12 +2,16 @@ package com.nickand.moviesfeed.movies;
 
 import com.nickand.moviesfeed.http.MoviesApiService;
 import com.nickand.moviesfeed.http.MoviesExtraInfoApisService;
+import com.nickand.moviesfeed.http.apimodel.OmdbAPI;
 import com.nickand.moviesfeed.http.apimodel.Result;
+import com.nickand.moviesfeed.http.apimodel.TopMoviesRated;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 
 public class MoviesRepository implements Repository {
 
@@ -36,7 +40,23 @@ public class MoviesRepository implements Repository {
 
     @Override
     public Observable<Result> getResultFromNetwork() {
-        return null;
+        Observable<TopMoviesRated> topMoviesRatedObservable = moviesApiService
+            .getTopMoviesRated(1)
+            .concatWith(moviesApiService.getTopMoviesRated(2))
+            .concatWith(moviesApiService.getTopMoviesRated(3));
+
+        return topMoviesRatedObservable
+            .concatMap(new Function<TopMoviesRated, Observable<Result>>() {
+                @Override
+                public Observable<Result> apply(TopMoviesRated topMoviesRated) {
+                    return Observable.fromIterable(topMoviesRated.getResults());
+                }
+            }).doOnNext(new Consumer<Result>() {
+                @Override
+                public void accept(Result result) {
+                    results.add(result);
+                }
+            });
     }
 
     @Override
@@ -57,7 +77,23 @@ public class MoviesRepository implements Repository {
 
     @Override
     public Observable<String> getCountryFromNetwork() {
-        return null;
+        Observable<Result> movies = getResultFromNetwork();
+        return movies.concatMap(new Function<Result, Observable<OmdbAPI>>() {
+            @Override
+            public Observable<OmdbAPI> apply(Result result) {
+                return moviesExtraInfoApisService.getExtraInfoMovie(result.getTitle());
+            }
+        }).concatMap(new Function<OmdbAPI, Observable<String>>() {
+            @Override
+            public Observable<String> apply(OmdbAPI omdbAPI) {
+                return Observable.just(omdbAPI.getCountry());
+            }
+        }).doOnNext(new Consumer<String>() {
+            @Override
+            public void accept(String country) {
+                countries.add(country);
+            }
+        });
     }
 
     @Override
