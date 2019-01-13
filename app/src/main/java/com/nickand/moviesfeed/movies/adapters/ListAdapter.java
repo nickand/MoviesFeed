@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.nickand.moviesfeed.R;
 import com.nickand.moviesfeed.model.ViewModel;
 
@@ -46,6 +47,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListItemViewHo
         Glide.with(listItemViewHolder.itemImage.getContext())
             .load(url.get(i).getUrlImage())
             .transition(DrawableTransitionOptions.withCrossFade())
+            .apply(new RequestOptions()
+            .error(R.drawable.ic_error))
             .into(listItemViewHolder.itemImage);
     }
 
