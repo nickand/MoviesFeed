@@ -1,10 +1,10 @@
 package com.nickand.moviesfeed.movies.repository;
 
-import com.nickand.moviesfeed.http.services.MoviesApiService;
-import com.nickand.moviesfeed.http.services.MoviesExtraInfoApisService;
 import com.nickand.moviesfeed.http.apimodel.OmdbAPI;
 import com.nickand.moviesfeed.http.apimodel.Result;
 import com.nickand.moviesfeed.http.apimodel.TopMoviesRated;
+import com.nickand.moviesfeed.http.services.MoviesApiService;
+import com.nickand.moviesfeed.http.services.MoviesExtraInfoApisService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,7 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 
 public class MoviesRepository implements Repository {
 
@@ -52,6 +53,21 @@ public class MoviesRepository implements Repository {
                 @Override
                 public Observable<Result> apply(TopMoviesRated topMoviesRated) {
                     return Observable.fromIterable(topMoviesRated.getResults());
+                }
+            })
+            .filter(new Predicate<Result>() {
+                @Override
+                public boolean test(Result result) {
+                    String currentString = result.getTitle();
+                    String[] separated = currentString.split(":");
+                    if (result.getTitle().startsWith("Black Mirror")) {
+                        result.setTitle(separated[0]);
+                    } else if (result.getTitle().startsWith("Sherlock")) {
+                        result.setTitle(separated[0]);
+                    } else if (result.getTitle().startsWith("Doctor Who")) {
+                        result.setTitle(separated[0]);
+                    }
+                    return true;
                 }
             }).doOnNext(new Consumer<Result>() {
                 @Override
