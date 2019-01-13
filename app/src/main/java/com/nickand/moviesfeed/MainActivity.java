@@ -1,6 +1,8 @@
 package com.nickand.moviesfeed;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -8,6 +10,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.nickand.moviesfeed.movies.ListAdapter;
@@ -33,6 +36,12 @@ public class MainActivity extends AppCompatActivity implements MoviesMVP.View {
     @BindView(R.id.recyclerViewMovies)
     RecyclerView recyclerView;
 
+    @BindView(R.id.placeSnackBar)
+    ViewGroup placeSnackBar;
+
+    @BindView(R.id.bottom_navigation)
+    BottomNavigationView bottomNavigationView;
+
     @Inject
     MoviesMVP.Presenter presenter;
 
@@ -54,6 +63,24 @@ public class MainActivity extends AppCompatActivity implements MoviesMVP.View {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.action_favorites:
+                            break;
+
+                        case R.id.action_schedules:
+                            break;
+
+                        case R.id.action_music:
+                            break;
+                    }
+                    return true;
+                }
+            });
     }
 
     @Override
@@ -75,11 +102,11 @@ public class MainActivity extends AppCompatActivity implements MoviesMVP.View {
     public void updateData(ViewModel viewModel) {
         resultList.add(viewModel);
         listAdapter.notifyItemInserted(resultList.size() - 1);
-        Log.d(TAG, "New info: "+viewModel.getTitle());
+        Log.d(TAG, "New info: " + viewModel.getTitle());
     }
 
     @Override
     public void showSnackbar(String message) {
-        Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(placeSnackBar, message, Snackbar.LENGTH_SHORT).show();
     }
 }
