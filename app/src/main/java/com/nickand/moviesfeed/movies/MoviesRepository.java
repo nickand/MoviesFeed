@@ -19,6 +19,7 @@ public class MoviesRepository implements Repository {
     private MoviesExtraInfoApisService moviesExtraInfoApisService;
 
     private List<String> countries;
+    private List<String> images;
     private List<Result> results;
     private long lastTimestamp;
 
@@ -32,6 +33,7 @@ public class MoviesRepository implements Repository {
 
         this.countries = new ArrayList<>();
         this.results = new ArrayList<>();
+        this.images = new ArrayList<>();
     }
 
     public boolean isUpdated() {
@@ -84,20 +86,20 @@ public class MoviesRepository implements Repository {
                 return moviesExtraInfoApisService.getExtraInfoMovie(result.getTitle());
             }
         }).concatMap(new Function<OmdbAPI, Observable<String>>() {
-            @Override
-            public Observable<String> apply(OmdbAPI omdbAPI) {
-                if (omdbAPI == null || omdbAPI.getCountry() == null) {
-                    return Observable.just("No country");
-                } else {
-                    return Observable.just(omdbAPI.getCountry());
+                @Override
+                public Observable<String> apply(OmdbAPI omdbAPI) {
+                    if (omdbAPI == null || omdbAPI.getCountry() == null) {
+                        return Observable.just("No country");
+                    } else {
+                        return Observable.just(omdbAPI.getCountry());
+                    }
                 }
-            }
-        }).doOnNext(new Consumer<String>() {
-            @Override
-            public void accept(String country) {
-                countries.add(country);
-            }
-        });
+            }).doOnNext(new Consumer<String>() {
+                @Override
+                public void accept(String country) {
+                    countries.add(country);
+                }
+            });
     }
 
     @Override
@@ -114,5 +116,46 @@ public class MoviesRepository implements Repository {
     @Override
     public Observable<String> getCountryData() {
         return getCountryFromCache().switchIfEmpty(getCountryFromNetwork());
+    }
+
+    @Override
+    public Observable<String> getImageFromNetwork() {
+        Observable<Result> movies = getResultFromNetwork();
+        return movies.concatMap(new Function<Result, Observable<OmdbAPI>>() {
+            @Override
+            public Observable<OmdbAPI> apply(Result result) {
+                return moviesExtraInfoApisService.getExtraInfoMovie(result.getTitle());
+            }
+        }).concatMap(new Function<OmdbAPI, Observable<String>>() {
+            @Override
+            public Observable<String> apply(OmdbAPI omdbAPI) {
+                if (omdbAPI == null || omdbAPI.getPoster() == null) {
+                    return Observable.just("No image");
+                } else {
+                    return Observable.just(omdbAPI.getPoster());
+                }
+            }
+        }).doOnNext(new Consumer<String>() {
+            @Override
+            public void accept(String image) {
+                images.add(image);
+            }
+        });
+    }
+
+    @Override
+    public Observable<String> getImageFromCache() {
+        if (isUpdated()) {
+            return Observable.fromIterable(images);
+        } else {
+            lastTimestamp = System.currentTimeMillis();
+            images.clear();
+            return Observable.empty();
+        }
+    }
+
+    @Override
+    public Observable<String> getImageData() {
+        return getImageFromCache().switchIfEmpty(getImageFromNetwork());
     }
 }

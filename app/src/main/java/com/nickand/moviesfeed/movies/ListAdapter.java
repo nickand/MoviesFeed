@@ -5,8 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.nickand.moviesfeed.R;
 
 import java.util.List;
@@ -17,9 +19,14 @@ import butterknife.ButterKnife;
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListItemViewHolder> {
 
     private List<ViewModel> list;
+    private List<ViewModel> url;
 
     public ListAdapter(List<ViewModel> list) {
         this.list = list;
+    }
+
+    public void setImages(List<ViewModel> url) {
+        this.url = url;
     }
 
     @NonNull
@@ -34,6 +41,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListItemViewHo
     public void onBindViewHolder(@NonNull ListItemViewHolder listItemViewHolder, int i) {
         listItemViewHolder.itemName.setText(list.get(i).getTitle());
         listItemViewHolder.countryName.setText(list.get(i).getCountry());
+        Glide.with(listItemViewHolder.itemImage.getContext())
+            .load(url.get(i).getUrlImage())
+            .into(listItemViewHolder.itemImage);
     }
 
     @Override
@@ -47,6 +57,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListItemViewHo
         public TextView itemName;
         @BindView(R.id.movieLocationTexView)
         public TextView countryName;
+        @BindView(R.id.movieImageView)
+        public ImageView itemImage;
 
         public ListItemViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -4,8 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,6 +48,7 @@ public class HomeFragment extends Fragment implements MoviesMVP.View {
 
     private ListAdapter listAdapter;
     private List<ViewModel> resultList = new ArrayList<>();
+    private List<ViewModel> imagesList = new ArrayList<>();
 
     public HomeFragment() {
         // Required empty public constructor
@@ -89,10 +89,9 @@ public class HomeFragment extends Fragment implements MoviesMVP.View {
 
         listAdapter = new ListAdapter(resultList);
         recyclerView.setAdapter(listAdapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(Objects.requireNonNull(getActivity()), DividerItemDecoration.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
         return view;
     }
@@ -115,8 +114,10 @@ public class HomeFragment extends Fragment implements MoviesMVP.View {
     @Override
     public void updateData(ViewModel viewModel) {
         resultList.add(viewModel);
+        listAdapter.setImages(resultList);
         listAdapter.notifyItemInserted(resultList.size() - 1);
         Log.d(TAG, "New info: " + viewModel.getTitle());
+        Log.d(TAG, "IMAGE: " + viewModel.getUrlImage());
     }
 
     @Override

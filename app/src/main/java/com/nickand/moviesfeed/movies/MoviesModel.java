@@ -3,7 +3,7 @@ package com.nickand.moviesfeed.movies;
 import com.nickand.moviesfeed.http.apimodel.Result;
 
 import io.reactivex.Observable;
-import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Function3;
 
 public class MoviesModel implements MoviesMVP.Model {
 
@@ -16,13 +16,12 @@ public class MoviesModel implements MoviesMVP.Model {
     @Override
     public Observable<ViewModel> result() {
         return Observable.zip(repository.getResultData(), repository.getCountryData(),
-            new BiFunction<Result, String, ViewModel>() {
+            repository.getImageData(), new Function3<Result, String, String, ViewModel>() {
                 @Override
-                public ViewModel apply(Result result, String country) {
-                    return new ViewModel(result.getTitle(), country);
+                public ViewModel apply(Result result, String country, String image) {
+                    return new ViewModel(result.getTitle(), country, image);
                 }
             });
-
     }
 }
 

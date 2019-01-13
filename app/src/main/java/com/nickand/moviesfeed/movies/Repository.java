@@ -13,4 +13,8 @@ public interface Repository {
     Observable<String> getCountryFromNetwork();
     Observable<String> getCountryFromCache();
     Observable<String> getCountryData();
+
+    Observable<String> getImageFromNetwork();
+    Observable<String> getImageFromCache();
+    Observable<String> getImageData();
 }
