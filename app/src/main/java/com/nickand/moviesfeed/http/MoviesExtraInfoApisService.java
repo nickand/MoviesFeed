@@ -8,6 +8,6 @@ import retrofit2.http.Query;
 
 public interface MoviesExtraInfoApisService {
 
-    @GET("t")
+    @GET("/")
     Observable<OmdbAPI> getExtraInfoMovie(@Query("t") String title);
 }

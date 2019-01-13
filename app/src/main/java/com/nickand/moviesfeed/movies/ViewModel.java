@@ -5,7 +5,8 @@ public class ViewModel {
     private String country;
 
     public ViewModel(String data, String country) {
-
+        title = data;
+        this.country = country;
     }
 
     public String getTitle() {

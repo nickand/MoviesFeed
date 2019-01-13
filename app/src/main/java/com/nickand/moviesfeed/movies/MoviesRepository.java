@@ -40,10 +40,10 @@ public class MoviesRepository implements Repository {
 
     @Override
     public Observable<Result> getResultFromNetwork() {
-        Observable<TopMoviesRated> topMoviesRatedObservable = moviesApiService
-            .getTopMoviesRated(1)
-            .concatWith(moviesApiService.getTopMoviesRated(2))
-            .concatWith(moviesApiService.getTopMoviesRated(3));
+        Observable<TopMoviesRated> topMoviesRatedObservable =
+            moviesApiService.getTopMoviesRated(1)
+                .concatWith(moviesApiService.getTopMoviesRated(2))
+                .concatWith(moviesApiService.getTopMoviesRated(3));
 
         return topMoviesRatedObservable
             .concatMap(new Function<TopMoviesRated, Observable<Result>>() {
@@ -86,7 +86,11 @@ public class MoviesRepository implements Repository {
         }).concatMap(new Function<OmdbAPI, Observable<String>>() {
             @Override
             public Observable<String> apply(OmdbAPI omdbAPI) {
-                return Observable.just(omdbAPI.getCountry());
+                if (omdbAPI == null || omdbAPI.getCountry() == null) {
+                    return Observable.just("No country");
+                } else {
+                    return Observable.just(omdbAPI.getCountry());
+                }
             }
         }).doOnNext(new Consumer<String>() {
             @Override

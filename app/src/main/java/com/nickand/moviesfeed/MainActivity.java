@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity implements MoviesMVP.View {
         listAdapter = new ListAdapter(resultList);
         recyclerView.setAdapter(listAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements MoviesMVP.View {
     @Override
     public void updateData(ViewModel viewModel) {
         resultList.add(viewModel);
-        listAdapter.notifyItemChanged(resultList.size() - 1);
+        listAdapter.notifyItemInserted(resultList.size() - 1);
         Log.d(TAG, "New info: "+viewModel.getTitle());
     }
 
