@@ -1,4 +1,6 @@
-package com.nickand.moviesfeed.http;
+package com.nickand.moviesfeed.http.module;
+
+import com.nickand.moviesfeed.http.services.MoviesApiService;
 
 import java.io.IOException;
 

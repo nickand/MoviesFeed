@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.nickand.moviesfeed.fragments.FavoriteFragment;
-import com.nickand.moviesfeed.fragments.HomeFragment;
-import com.nickand.moviesfeed.fragments.SearchFragment;
+import com.nickand.moviesfeed.favorites.view.FavoriteFragment;
+import com.nickand.moviesfeed.movies.view.HomeFragment;
+import com.nickand.moviesfeed.search.view.SearchFragment;
 
 import java.util.Objects;
 

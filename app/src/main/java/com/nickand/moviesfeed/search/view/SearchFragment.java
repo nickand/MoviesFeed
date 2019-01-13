@@ -1,4 +1,4 @@
-package com.nickand.moviesfeed.fragments;
+package com.nickand.moviesfeed.search.view;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,10 +14,10 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FavoriteFragment extends Fragment {
+public class SearchFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final String TAG = FavoriteFragment.class.getName();
+    private static final String TAG = SearchFragment.class.getName();
 
     private String mParam1;
     private String mParam2;
@@ -25,16 +25,16 @@ public class FavoriteFragment extends Fragment {
     @BindView(R.id.rootView)
     ViewGroup rootView;
 
-    public FavoriteFragment() {
+    public SearchFragment() {
         // Required empty public constructor
     }
 
-    public static FavoriteFragment newInstance() {
-        return new FavoriteFragment();
+    public static SearchFragment newInstance() {
+        return new SearchFragment();
     }
 
-    public static FavoriteFragment newInstance(String param1, String param2) {
-        FavoriteFragment fragment = new FavoriteFragment();
+    public static SearchFragment newInstance(String param1, String param2) {
+        SearchFragment fragment = new SearchFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -58,7 +58,7 @@ public class FavoriteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_favorite, container, false);
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         ButterKnife.bind(this, view);
 

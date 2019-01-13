@@ -1,6 +1,8 @@
-package com.nickand.moviesfeed.movies;
+package com.nickand.moviesfeed.movies.mvp.model;
 
 import com.nickand.moviesfeed.http.apimodel.Result;
+import com.nickand.moviesfeed.movies.mvp.MoviesMVP;
+import com.nickand.moviesfeed.movies.repository.Repository;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Function3;

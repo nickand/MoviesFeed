@@ -1,7 +1,12 @@
-package com.nickand.moviesfeed.movies;
+package com.nickand.moviesfeed.movies.module;
 
-import com.nickand.moviesfeed.http.MoviesApiService;
-import com.nickand.moviesfeed.http.MoviesExtraInfoApisService;
+import com.nickand.moviesfeed.http.services.MoviesApiService;
+import com.nickand.moviesfeed.http.services.MoviesExtraInfoApisService;
+import com.nickand.moviesfeed.movies.mvp.MoviesMVP;
+import com.nickand.moviesfeed.movies.mvp.model.MoviesModel;
+import com.nickand.moviesfeed.movies.mvp.presenter.MoviesPresenter;
+import com.nickand.moviesfeed.movies.repository.MoviesRepository;
+import com.nickand.moviesfeed.movies.repository.Repository;
 
 import javax.inject.Singleton;
 

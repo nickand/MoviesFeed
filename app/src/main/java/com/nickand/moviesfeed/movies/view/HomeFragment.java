@@ -1,4 +1,4 @@
-package com.nickand.moviesfeed.fragments;
+package com.nickand.moviesfeed.movies.view;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -12,9 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nickand.moviesfeed.R;
-import com.nickand.moviesfeed.movies.ListAdapter;
-import com.nickand.moviesfeed.movies.MoviesMVP;
-import com.nickand.moviesfeed.movies.ViewModel;
+import com.nickand.moviesfeed.movies.adapters.ListAdapter;
+import com.nickand.moviesfeed.movies.mvp.MoviesMVP;
+import com.nickand.moviesfeed.movies.mvp.model.ViewModel;
 import com.nickand.moviesfeed.root.App;
 import com.nickand.moviesfeed.util.GridSpacingItemDecoration;
 

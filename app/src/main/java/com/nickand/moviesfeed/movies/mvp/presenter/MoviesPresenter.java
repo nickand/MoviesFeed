@@ -1,4 +1,7 @@
-package com.nickand.moviesfeed.movies;
+package com.nickand.moviesfeed.movies.mvp.presenter;
+
+import com.nickand.moviesfeed.movies.mvp.MoviesMVP;
+import com.nickand.moviesfeed.movies.mvp.model.ViewModel;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;

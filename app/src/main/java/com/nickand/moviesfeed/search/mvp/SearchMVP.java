@@ -1,8 +1,10 @@
-package com.nickand.moviesfeed.movies;
+package com.nickand.moviesfeed.search.mvp;
+
+import com.nickand.moviesfeed.movies.mvp.model.ViewModel;
 
 import io.reactivex.Observable;
 
-public interface MoviesMVP {
+public interface SearchMVP {
 
     interface View {
         void updateData(ViewModel viewModel);
@@ -12,7 +14,7 @@ public interface MoviesMVP {
     interface Presenter {
         void loadData();
         void rxUnsubscribe();
-        void setView(MoviesMVP.View view);
+        void setView(SearchMVP.View view);
     }
 
     interface Model {

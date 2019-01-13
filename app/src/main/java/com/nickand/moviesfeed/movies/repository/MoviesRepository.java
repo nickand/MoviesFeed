@@ -1,7 +1,7 @@
-package com.nickand.moviesfeed.movies;
+package com.nickand.moviesfeed.movies.repository;
 
-import com.nickand.moviesfeed.http.MoviesApiService;
-import com.nickand.moviesfeed.http.MoviesExtraInfoApisService;
+import com.nickand.moviesfeed.http.services.MoviesApiService;
+import com.nickand.moviesfeed.http.services.MoviesExtraInfoApisService;
 import com.nickand.moviesfeed.http.apimodel.OmdbAPI;
 import com.nickand.moviesfeed.http.apimodel.Result;
 import com.nickand.moviesfeed.http.apimodel.TopMoviesRated;

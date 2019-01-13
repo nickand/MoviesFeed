@@ -1,4 +1,4 @@
-package com.nickand.moviesfeed.movies;
+package com.nickand.moviesfeed.movies.repository;
 
 import com.nickand.moviesfeed.http.apimodel.Result;
 

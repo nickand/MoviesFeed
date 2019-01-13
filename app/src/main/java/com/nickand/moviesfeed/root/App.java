@@ -3,9 +3,9 @@ package com.nickand.moviesfeed.root;
 import android.app.Application;
 
 import com.nickand.moviesfeed.R;
-import com.nickand.moviesfeed.http.MovieExtraInfoApiModule;
-import com.nickand.moviesfeed.http.MovieTitleApiModule;
-import com.nickand.moviesfeed.movies.MoviesModule;
+import com.nickand.moviesfeed.http.module.MovieExtraInfoApiModule;
+import com.nickand.moviesfeed.http.module.MovieTitleApiModule;
+import com.nickand.moviesfeed.movies.module.MoviesModule;
 
 import io.github.inflationx.calligraphy3.CalligraphyConfig;
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor;

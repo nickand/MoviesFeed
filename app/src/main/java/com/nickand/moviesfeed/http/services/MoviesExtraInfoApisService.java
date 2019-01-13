@@ -1,4 +1,4 @@
-package com.nickand.moviesfeed.http;
+package com.nickand.moviesfeed.http.services;
 
 import com.nickand.moviesfeed.http.apimodel.OmdbAPI;
 
