@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.nickand.moviesfeed.R;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListItemViewHo
         listItemViewHolder.countryName.setText(list.get(i).getCountry());
         Glide.with(listItemViewHolder.itemImage.getContext())
             .load(url.get(i).getUrlImage())
+            .transition(DrawableTransitionOptions.withCrossFade())
             .into(listItemViewHolder.itemImage);
     }
 
