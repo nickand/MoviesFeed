@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 
+import com.nickand.moviesfeed.fragments.FavoriteFragment;
 import com.nickand.moviesfeed.fragments.HomeFragment;
 import com.nickand.moviesfeed.fragments.SearchFragment;
 
@@ -52,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
                             break;
 
                         case R.id.action_favorites:
+                            Fragment favoriteFragment = new FavoriteFragment();
+                            loadFragment(favoriteFragment);
                             break;
                     }
                     return true;
