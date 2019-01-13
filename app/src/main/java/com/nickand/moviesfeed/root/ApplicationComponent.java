@@ -2,6 +2,7 @@ package com.nickand.moviesfeed.root;
 
 import com.nickand.moviesfeed.MainActivity;
 import com.nickand.moviesfeed.fragments.HomeFragment;
+import com.nickand.moviesfeed.fragments.SearchFragment;
 import com.nickand.moviesfeed.http.MovieExtraInfoApiModule;
 import com.nickand.moviesfeed.http.MovieTitleApiModule;
 import com.nickand.moviesfeed.movies.MoviesModule;
@@ -15,5 +16,7 @@ import dagger.Component;
     MovieTitleApiModule.class, MovieExtraInfoApiModule.class})
 public interface ApplicationComponent {
     void inject(MainActivity mainActivity);
+
     void inject(HomeFragment homeFragment);
+    void inject(SearchFragment searchFragment);
 }

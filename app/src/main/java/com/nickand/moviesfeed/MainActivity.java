@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.nickand.moviesfeed.fragments.HomeFragment;
+import com.nickand.moviesfeed.fragments.SearchFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigationView;
 
+    private HomeFragment homeFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        Fragment fragment = new HomeFragment();
-        loadFragment(fragment);
+        homeFragment = new HomeFragment();
+        loadFragment(homeFragment);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -40,11 +43,12 @@ public class MainActivity extends AppCompatActivity {
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.action_home:
-                            Fragment fragment = new HomeFragment();
-                            loadFragment(fragment);
+                            loadFragment(homeFragment);
                             break;
 
                         case R.id.action_search:
+                            Fragment searchFragment = new SearchFragment();
+                            loadFragment(searchFragment);
                             break;
 
                         case R.id.action_favorites:
