@@ -13,19 +13,21 @@
         android:id="@+id/movieImageView"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:layout_width="120dp"
-        android:layout_height="160dp" />
+        android:layout_width="match_parent"
+        android:layout_height="280dp" />
 
     <TextView
         android:id="@+id/movieTitleTexView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="12dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:paddingTop="8dp"
         android:ellipsize="end"
         android:gravity="start"
-        android:textColor="#3f3f3f"
+        android:textColor="#f7f7f7"
         android:textSize="16sp"
+        android:maxLines="1"
         app:layout_constraintTop_toBottomOf="@+id/movieImageView"
         tools:text="Title" />
 
@@ -33,9 +35,11 @@
         android:id="@+id/movieLocationTexView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:paddingBottom="8dp"
         android:textSize="12sp"
+        android:textColor="#9D9DA1"
         app:layout_constraintTop_toBottomOf="@+id/movieTitleTexView"
         tools:text="USA" />
 

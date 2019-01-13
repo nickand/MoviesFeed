@@ -16,6 +16,7 @@ import com.nickand.moviesfeed.movies.ListAdapter;
 import com.nickand.moviesfeed.movies.MoviesMVP;
 import com.nickand.moviesfeed.movies.ViewModel;
 import com.nickand.moviesfeed.root.App;
+import com.nickand.moviesfeed.util.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,6 +90,7 @@ public class HomeFragment extends Fragment implements MoviesMVP.View {
 
         listAdapter = new ListAdapter(resultList);
         recyclerView.setAdapter(listAdapter);
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, 10, true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
