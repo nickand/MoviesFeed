@@ -1,4 +1,4 @@
-package com.nickand.moviesfeed.movies.mvp.model;
+package com.nickand.moviesfeed.model;
 
 public class ViewModel {
     private String title;

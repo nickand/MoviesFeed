@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.nickand.moviesfeed.R;
-import com.nickand.moviesfeed.movies.mvp.model.ViewModel;
+import com.nickand.moviesfeed.model.ViewModel;
 
 import java.util.List;
 

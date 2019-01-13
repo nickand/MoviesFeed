@@ -1,6 +1,6 @@
 package com.nickand.moviesfeed.search.mvp;
 
-import com.nickand.moviesfeed.movies.mvp.model.ViewModel;
+import com.nickand.moviesfeed.model.ViewModel;
 
 import io.reactivex.Observable;
 
