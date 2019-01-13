@@ -1,33 +1,20 @@
 package com.nickand.moviesfeed.fragments;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.nickand.moviesfeed.R;
-import com.nickand.moviesfeed.movies.ListAdapter;
-import com.nickand.moviesfeed.movies.MoviesMVP;
-import com.nickand.moviesfeed.movies.ViewModel;
 import com.nickand.moviesfeed.root.App;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SearchFragment extends Fragment implements MoviesMVP.View {
+public class SearchFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String TAG = SearchFragment.class.getName();
@@ -37,18 +24,6 @@ public class SearchFragment extends Fragment implements MoviesMVP.View {
 
     @BindView(R.id.rootView)
     ViewGroup rootView;
-
-    @BindView(R.id.recyclerViewMovies)
-    RecyclerView recyclerView;
-
-    @BindView(R.id.placeSnackBar)
-    ViewGroup placeSnackBar;
-
-    @Inject
-    MoviesMVP.Presenter presenter;
-
-    private ListAdapter listAdapter;
-    private List<ViewModel> resultList = new ArrayList<>();
 
     public SearchFragment() {
         // Required empty public constructor
@@ -87,40 +62,16 @@ public class SearchFragment extends Fragment implements MoviesMVP.View {
 
         ButterKnife.bind(this, view);
 
-        listAdapter = new ListAdapter(resultList);
-        recyclerView.setAdapter(listAdapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(Objects.requireNonNull(getActivity()), DividerItemDecoration.VERTICAL));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        presenter.setView(this);
-        presenter.loadData();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        presenter.rxUnsubscribe();
-        resultList.clear();
-        listAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void updateData(ViewModel viewModel) {
-        resultList.add(viewModel);
-        listAdapter.notifyItemInserted(resultList.size() - 1);
-        Log.d(TAG, "New info: " + viewModel.getTitle());
-    }
-
-    @Override
-    public void showSnackbar(String message) {
-        Snackbar.make(placeSnackBar, message, Snackbar.LENGTH_SHORT).show();
     }
 }
