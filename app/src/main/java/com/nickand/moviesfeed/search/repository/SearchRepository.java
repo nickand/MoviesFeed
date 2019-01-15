@@ -1,10 +1,13 @@
 package com.nickand.moviesfeed.search.repository;
 
 import com.nickand.moviesfeed.http.apimodel.OmdbAPI;
+import com.nickand.moviesfeed.http.apimodel.OmdbApiSearch;
 import com.nickand.moviesfeed.http.apimodel.Result;
+import com.nickand.moviesfeed.http.apimodel.Search;
 import com.nickand.moviesfeed.http.apimodel.TopMoviesRated;
 import com.nickand.moviesfeed.http.services.MoviesApiService;
 import com.nickand.moviesfeed.http.services.MoviesExtraInfoApisService;
+import com.nickand.moviesfeed.http.services.MoviesSearchInfoApisService;
 import com.nickand.moviesfeed.model.ViewModel;
 import com.nickand.moviesfeed.repository.Repository;
 
@@ -20,7 +23,7 @@ import io.reactivex.functions.Predicate;
 
 public class SearchRepository implements Repository {
 
-    private MoviesExtraInfoApisService moviesExtraInfoApisService;
+    private MoviesSearchInfoApisService moviesExtraInfoApisService;
 
     private String movieTitle;
     private String movieCountry;
@@ -29,7 +32,7 @@ public class SearchRepository implements Repository {
 
     private static final long CACHE_LIFETIME = 20 * 1000;
 
-    public SearchRepository(MoviesExtraInfoApisService eService) {
+    public SearchRepository(MoviesSearchInfoApisService eService) {
         moviesExtraInfoApisService = eService;
 
         this.lastTimestamp = System.currentTimeMillis();
@@ -88,40 +91,17 @@ public class SearchRepository implements Repository {
         return null;
     }
 
-    public Observable<String> getTitleFromNetwork(String stringTitle) {
-        Observable<OmdbAPI> movie = moviesExtraInfoApisService.getExtraInfoMovie(stringTitle);
-        return movie.concatMap(new Function<OmdbAPI, Observable<String>>() {
+    public Observable<Search> getTitleFromNetwork(String stringTitle) {
+        Observable<OmdbApiSearch> movie = moviesExtraInfoApisService.getExtraInfoMovie(stringTitle);
+        return movie.concatMap(new Function<OmdbApiSearch, Observable<Search>>() {
             @Override
-            public Observable<String> apply(OmdbAPI omdbAPI) {
-                if (omdbAPI == null || omdbAPI.getPoster() == null) {
-                    return Observable.just("No title");
-                } else {
-                    return Observable.just(omdbAPI.getTitle());
-                }
+            public Observable<Search> apply(OmdbApiSearch omdbApiSearch) {
+                return Observable.fromIterable(omdbApiSearch.getSearch());
             }
-        }).doOnNext(new Consumer<String>() {
+        }).concatMap(new Function<Search, Observable<Search>>() {
             @Override
-            public void accept(String title) {
-                movieTitle = title;
-            }
-        });
-    }
-
-    public Observable<String> getCountryDataByTitle(String titleMovie) {
-        Observable<OmdbAPI> movie = moviesExtraInfoApisService.getExtraInfoMovie(titleMovie);
-        return movie.concatMap(new Function<OmdbAPI, Observable<String>>() {
-            @Override
-            public Observable<String> apply(OmdbAPI omdbAPI) {
-                if (omdbAPI == null || omdbAPI.getCountry() == null) {
-                    return Observable.just("No country");
-                } else {
-                    return Observable.just(omdbAPI.getCountry());
-                }
-            }
-        }).doOnNext(new Consumer<String>() {
-            @Override
-            public void accept(String country) {
-                movieCountry = country;
+            public Observable<Search> apply(Search search) {
+                return Observable.just(search);
             }
         });
     }
