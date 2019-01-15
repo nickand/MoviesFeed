@@ -87,7 +87,7 @@ public class SearchFragment extends Fragment implements SearchMVP.View{
                         listAdapter.notifyDataSetChanged();
                     }
 
-                    presenter.loadDataByTitle(Observable.just(text.getText().toString()));
+                    presenter.loadDataByTitle(text.getText().toString());
                     return true;
                 }
                 return false;

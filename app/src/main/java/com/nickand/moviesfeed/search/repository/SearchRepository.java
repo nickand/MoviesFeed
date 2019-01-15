@@ -5,40 +5,38 @@ import com.nickand.moviesfeed.http.apimodel.Result;
 import com.nickand.moviesfeed.http.apimodel.TopMoviesRated;
 import com.nickand.moviesfeed.http.services.MoviesApiService;
 import com.nickand.moviesfeed.http.services.MoviesExtraInfoApisService;
+import com.nickand.moviesfeed.model.ViewModel;
 import com.nickand.moviesfeed.repository.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Function3;
 import io.reactivex.functions.Predicate;
 
 public class SearchRepository implements Repository {
 
-    private MoviesApiService moviesApiService;
     private MoviesExtraInfoApisService moviesExtraInfoApisService;
 
-    private List<String> countries;
-    private List<String> images;
-    private List<Result> results;
-    private String stringTitle;
+    private String movieTitle;
+    private String movieCountry;
+    private String movieImage;
     private long lastTimestamp;
 
     private static final long CACHE_LIFETIME = 20 * 1000;
 
-    public SearchRepository(MoviesApiService mService, MoviesExtraInfoApisService eService,
-                            String stringTitleMovie) {
-        moviesApiService = mService;
+    public SearchRepository(MoviesExtraInfoApisService eService) {
         moviesExtraInfoApisService = eService;
-        stringTitle = stringTitleMovie;
 
         this.lastTimestamp = System.currentTimeMillis();
 
-        this.countries = new ArrayList<>();
-        this.results = new ArrayList<>();
-        this.images = new ArrayList<>();
+        movieTitle = "";
+        movieCountry = "";
+        movieImage = "";
     }
 
     public boolean isUpdated() {
@@ -47,54 +45,71 @@ public class SearchRepository implements Repository {
 
     @Override
     public Observable<Result> getResultFromNetwork() {
-        Observable<TopMoviesRated> topMoviesRatedObservable =
-            moviesApiService.getTopMoviesRated(1);
-
-        return topMoviesRatedObservable
-            .concatMap(new Function<TopMoviesRated, Observable<Result>>() {
-                @Override
-                public Observable<Result> apply(TopMoviesRated topMoviesRated) {
-                    return Observable.fromIterable(topMoviesRated.getResults());
-                }
-            }).filter(new Predicate<Result>() {
-                @Override
-                public boolean test(Result result) {
-                    result.setTitle(stringTitle);
-                    return true;
-                }
-            }).doOnNext(new Consumer<Result>() {
-                @Override
-                public void accept(Result result) {
-                    results.add(result);
-                }
-            });
+        return null;
     }
 
     @Override
     public Observable<Result> getResultFromCache() {
-        if (isUpdated()) {
-            return Observable.fromIterable(results);
-        } else {
-            lastTimestamp = System.currentTimeMillis();
-            results.clear();
-            return Observable.empty();
-        }
+        return null;
     }
 
     @Override
     public Observable<Result> getResultData() {
-        return getResultFromCache().switchIfEmpty(getResultFromNetwork());
+        return null;
     }
 
     @Override
     public Observable<String> getCountryFromNetwork() {
-        Observable<Result> movies = getResultFromNetwork();
-        return movies.concatMap(new Function<Result, Observable<OmdbAPI>>() {
+        return null;
+    }
+
+    @Override
+    public Observable<String> getCountryFromCache() {
+        return null;
+    }
+
+    @Override
+    public Observable<String> getCountryData() {
+        return null;
+    }
+
+    @Override
+    public Observable<String> getImageFromNetwork() {
+        return null;
+    }
+
+    @Override
+    public Observable<String> getImageFromCache() {
+        return null;
+    }
+
+    @Override
+    public Observable<String> getImageData() {
+        return null;
+    }
+
+    public Observable<String> getTitleFromNetwork(String stringTitle) {
+        Observable<OmdbAPI> movie = moviesExtraInfoApisService.getExtraInfoMovie(stringTitle);
+        return movie.concatMap(new Function<OmdbAPI, Observable<String>>() {
             @Override
-            public Observable<OmdbAPI> apply(Result result) {
-                return moviesExtraInfoApisService.getExtraInfoMovie(result.getTitle());
+            public Observable<String> apply(OmdbAPI omdbAPI) {
+                if (omdbAPI == null || omdbAPI.getPoster() == null) {
+                    return Observable.just("No title");
+                } else {
+                    return Observable.just(omdbAPI.getTitle());
+                }
             }
-        }).concatMap(new Function<OmdbAPI, Observable<String>>() {
+        }).doOnNext(new Consumer<String>() {
+            @Override
+            public void accept(String title) {
+                movieTitle = title;
+            }
+        });
+    }
+
+    public Observable<String> getCountryDataByTitle(String titleMovie) {
+        Observable<OmdbAPI> movie = moviesExtraInfoApisService.getExtraInfoMovie(titleMovie);
+        return movie.concatMap(new Function<OmdbAPI, Observable<String>>() {
             @Override
             public Observable<String> apply(OmdbAPI omdbAPI) {
                 if (omdbAPI == null || omdbAPI.getCountry() == null) {
@@ -106,98 +121,32 @@ public class SearchRepository implements Repository {
         }).doOnNext(new Consumer<String>() {
             @Override
             public void accept(String country) {
-                countries.add(country);
+                movieCountry = country;
             }
         });
     }
 
-    @Override
-    public Observable<String> getCountryFromCache() {
-        if (isUpdated()) {
-            return Observable.fromIterable(countries);
-        } else {
-            lastTimestamp = System.currentTimeMillis();
-            countries.clear();
-            return Observable.empty();
-        }
-    }
-
-    @Override
-    public Observable<String> getCountryData() {
-        return getCountryFromCache().switchIfEmpty(getCountryFromNetwork());
-    }
-
-    @Override
-    public Observable<String> getImageFromNetwork() {
-        Observable<Result> movies = getResultFromNetwork();
-        return movies.concatMap(new Function<Result, Observable<OmdbAPI>>() {
-            @Override
-            public Observable<OmdbAPI> apply(Result result) {
-                return moviesExtraInfoApisService.getExtraInfoMovie(result.getTitle());
-            }
-        }).concatMap(new Function<OmdbAPI, Observable<String>>() {
-            @Override
-            public Observable<String> apply(OmdbAPI omdbAPI) {
-                if (omdbAPI == null || omdbAPI.getPoster() == null) {
-                    return Observable.just("No image");
-                } else {
-                    return Observable.just(omdbAPI.getPoster());
-                }
-            }
-        }).doOnNext(new Consumer<String>() {
-            @Override
-            public void accept(String image) {
-                images.add(image);
-            }
-        });
-    }
-
-    @Override
-    public Observable<String> getImageFromCache() {
-        if (isUpdated()) {
-            return Observable.fromIterable(images);
-        } else {
-            lastTimestamp = System.currentTimeMillis();
-            images.clear();
-            return Observable.empty();
-        }
-    }
-
-    @Override
-    public Observable<String> getImageData() {
-        return getImageFromCache().switchIfEmpty(getImageFromNetwork());
-    }
-
-    public Observable<String> getTitleFromNetwork() {
-        Observable<OmdbAPI> movie = moviesExtraInfoApisService.getExtraInfoMovie(stringTitle);
+    public Observable<String> getImageDataByTitle(String titleMovie) {
+        Observable<OmdbAPI> movie = moviesExtraInfoApisService.getExtraInfoMovie(titleMovie);
         return movie.concatMap(new Function<OmdbAPI, Observable<String>>() {
             @Override
             public Observable<String> apply(OmdbAPI omdbAPI) {
-                if (omdbAPI == null || omdbAPI.getPoster() == null) {
-                    return Observable.just("No image");
-                } else {
-                    return Observable.just(omdbAPI.getPoster());
-                }
+                return Observable.just(omdbAPI.getPoster());
             }
         }).doOnNext(new Consumer<String>() {
             @Override
             public void accept(String image) {
-                images.add(image);
+                movieImage = image;
             }
         });
     }
 
-    public Observable<String> getTitleFromCache() {
-        if (isUpdated()) {
-            return Observable.fromIterable(images);
-        } else {
-            lastTimestamp = System.currentTimeMillis();
-            images.clear();
-            return Observable.empty();
-        }
-    }
-
-    public Observable<String> getTitleData() {
-        return getTitleFromCache().switchIfEmpty(getTitleFromNetwork());
+    public Observable<ViewModel> getMyShit(String titleMovie) {
+        return Observable.zip(getTitleFromNetwork(titleMovie), getCountryDataByTitle(titleMovie), getImageDataByTitle(titleMovie), new Function3<String, String, String, ViewModel>() {
+            @Override
+            public ViewModel apply(String title, String country, String image) {
+                return new ViewModel(title, country, image);
+            }
+        });
     }
 }

@@ -21,7 +21,7 @@ public class SearchPresenter implements SearchMVP.Presenter {
     }
 
     @Override
-    public void loadDataByTitle(Observable<String> title) {
+    public void loadDataByTitle(String title) {
         subscription = model.result(title)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

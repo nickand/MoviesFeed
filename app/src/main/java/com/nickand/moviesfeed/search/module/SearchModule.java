@@ -27,14 +27,7 @@ public class SearchModule {
 
     @Provides
     @Singleton
-    public SearchRepository provideSearchRepository(MoviesApiService moviesApiService,
-                                             MoviesExtraInfoApisService moviesExtraInfoApisService, String title) {
-        return new SearchRepository(moviesApiService, moviesExtraInfoApisService, title);
-    }
-
-    @Provides
-    @Singleton
-    public String providerString() {
-        return "Hercules";
+    public SearchRepository provideSearchRepository(MoviesExtraInfoApisService moviesExtraInfoApisService) {
+        return new SearchRepository(moviesExtraInfoApisService);
     }
 }

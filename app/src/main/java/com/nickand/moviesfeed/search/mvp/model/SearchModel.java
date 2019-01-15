@@ -16,14 +16,8 @@ public class SearchModel implements SearchMVP.Model {
     }
 
     @Override
-    public Observable<ViewModel> result(Observable<String> titleMovie) {
-        return Observable.zip(repository.getTitleData(), repository.getCountryData(),
-            repository.getImageData(), new Function3<String, String, String, ViewModel>() {
-                @Override
-                public ViewModel apply(String title, String country, String image) {
-                    return new ViewModel(title, country, image);
-                }
-            });
+    public Observable<ViewModel> result(String titleMovie) {
+        return repository.getMyShit(titleMovie);
     }
 }
 

@@ -51,6 +51,9 @@ public class Result {
     @Expose
     private String releaseDate;
 
+    private String country;
+    private String image;
+
     public Integer getVoteCount() {
         return voteCount;
     }
@@ -163,4 +166,19 @@ public class Result {
         this.releaseDate = releaseDate;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }
