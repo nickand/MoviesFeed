@@ -6,7 +6,7 @@ import com.nickand.moviesfeed.movies.mvp.MoviesMVP;
 import com.nickand.moviesfeed.movies.mvp.model.MoviesModel;
 import com.nickand.moviesfeed.movies.mvp.presenter.MoviesPresenter;
 import com.nickand.moviesfeed.movies.repository.MoviesRepository;
-import com.nickand.moviesfeed.movies.repository.Repository;
+import com.nickand.moviesfeed.repository.Repository;
 
 import javax.inject.Singleton;
 

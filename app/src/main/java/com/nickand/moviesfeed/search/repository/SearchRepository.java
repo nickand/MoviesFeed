@@ -1,4 +1,4 @@
-package com.nickand.moviesfeed.movies.repository;
+package com.nickand.moviesfeed.search.repository;
 
 import com.nickand.moviesfeed.http.apimodel.OmdbAPI;
 import com.nickand.moviesfeed.http.apimodel.Result;
@@ -15,7 +15,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 
-public class MoviesRepository implements Repository {
+public class SearchRepository implements Repository {
 
     private MoviesApiService moviesApiService;
     private MoviesExtraInfoApisService moviesExtraInfoApisService;
@@ -23,13 +23,16 @@ public class MoviesRepository implements Repository {
     private List<String> countries;
     private List<String> images;
     private List<Result> results;
+    private String stringTitle;
     private long lastTimestamp;
 
     private static final long CACHE_LIFETIME = 20 * 1000;
 
-    public MoviesRepository(MoviesApiService mService, MoviesExtraInfoApisService eService) {
+    public SearchRepository(MoviesApiService mService, MoviesExtraInfoApisService eService,
+                            String stringTitleMovie) {
         moviesApiService = mService;
         moviesExtraInfoApisService = eService;
+        stringTitle = stringTitleMovie;
 
         this.lastTimestamp = System.currentTimeMillis();
 
@@ -45,9 +48,7 @@ public class MoviesRepository implements Repository {
     @Override
     public Observable<Result> getResultFromNetwork() {
         Observable<TopMoviesRated> topMoviesRatedObservable =
-            moviesApiService.getTopMoviesRated(1)
-                .concatWith(moviesApiService.getTopMoviesRated(2))
-                .concatWith(moviesApiService.getTopMoviesRated(3));
+            moviesApiService.getTopMoviesRated(1);
 
         return topMoviesRatedObservable
             .concatMap(new Function<TopMoviesRated, Observable<Result>>() {
@@ -55,19 +56,10 @@ public class MoviesRepository implements Repository {
                 public Observable<Result> apply(TopMoviesRated topMoviesRated) {
                     return Observable.fromIterable(topMoviesRated.getResults());
                 }
-            })
-            .filter(new Predicate<Result>() {
+            }).filter(new Predicate<Result>() {
                 @Override
                 public boolean test(Result result) {
-                    String currentString = result.getTitle();
-                    String[] separated = currentString.split(":");
-                    if (result.getTitle().startsWith("Black Mirror")) {
-                        result.setTitle(separated[0]);
-                    } else if (result.getTitle().startsWith("Sherlock")) {
-                        result.setTitle(separated[0]);
-                    } else if (result.getTitle().startsWith("Doctor Who")) {
-                        result.setTitle(separated[0]);
-                    }
+                    result.setTitle(stringTitle);
                     return true;
                 }
             }).doOnNext(new Consumer<Result>() {
@@ -103,20 +95,20 @@ public class MoviesRepository implements Repository {
                 return moviesExtraInfoApisService.getExtraInfoMovie(result.getTitle());
             }
         }).concatMap(new Function<OmdbAPI, Observable<String>>() {
-                @Override
-                public Observable<String> apply(OmdbAPI omdbAPI) {
-                    if (omdbAPI == null || omdbAPI.getCountry() == null) {
-                        return Observable.just("No country");
-                    } else {
-                        return Observable.just(omdbAPI.getCountry());
-                    }
+            @Override
+            public Observable<String> apply(OmdbAPI omdbAPI) {
+                if (omdbAPI == null || omdbAPI.getCountry() == null) {
+                    return Observable.just("No country");
+                } else {
+                    return Observable.just(omdbAPI.getCountry());
                 }
-            }).doOnNext(new Consumer<String>() {
-                @Override
-                public void accept(String country) {
-                    countries.add(country);
-                }
-            });
+            }
+        }).doOnNext(new Consumer<String>() {
+            @Override
+            public void accept(String country) {
+                countries.add(country);
+            }
+        });
     }
 
     @Override
@@ -174,5 +166,38 @@ public class MoviesRepository implements Repository {
     @Override
     public Observable<String> getImageData() {
         return getImageFromCache().switchIfEmpty(getImageFromNetwork());
+    }
+
+    public Observable<String> getTitleFromNetwork() {
+        Observable<OmdbAPI> movie = moviesExtraInfoApisService.getExtraInfoMovie(stringTitle);
+        return movie.concatMap(new Function<OmdbAPI, Observable<String>>() {
+            @Override
+            public Observable<String> apply(OmdbAPI omdbAPI) {
+                if (omdbAPI == null || omdbAPI.getPoster() == null) {
+                    return Observable.just("No image");
+                } else {
+                    return Observable.just(omdbAPI.getPoster());
+                }
+            }
+        }).doOnNext(new Consumer<String>() {
+            @Override
+            public void accept(String image) {
+                images.add(image);
+            }
+        });
+    }
+
+    public Observable<String> getTitleFromCache() {
+        if (isUpdated()) {
+            return Observable.fromIterable(images);
+        } else {
+            lastTimestamp = System.currentTimeMillis();
+            images.clear();
+            return Observable.empty();
+        }
+    }
+
+    public Observable<String> getTitleData() {
+        return getTitleFromCache().switchIfEmpty(getTitleFromNetwork());
     }
 }

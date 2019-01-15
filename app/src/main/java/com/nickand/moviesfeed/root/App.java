@@ -6,6 +6,7 @@ import com.nickand.moviesfeed.R;
 import com.nickand.moviesfeed.http.module.MovieExtraInfoApiModule;
 import com.nickand.moviesfeed.http.module.MovieTitleApiModule;
 import com.nickand.moviesfeed.movies.module.MoviesModule;
+import com.nickand.moviesfeed.search.module.SearchModule;
 
 import io.github.inflationx.calligraphy3.CalligraphyConfig;
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
@@ -32,6 +33,7 @@ public class App extends Application {
             .moviesModule(new MoviesModule())
             .movieTitleApiModule(new MovieTitleApiModule())
             .movieExtraInfoApiModule(new MovieExtraInfoApiModule())
+            .searchModule(new SearchModule())
             .build();
     }
 

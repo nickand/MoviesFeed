@@ -12,12 +12,12 @@ public interface SearchMVP {
     }
 
     interface Presenter {
-        void loadData();
+        void loadDataByTitle(Observable<String> title);
         void rxUnsubscribe();
         void setView(SearchMVP.View view);
     }
 
     interface Model {
-        Observable<ViewModel> result();
+        Observable<ViewModel> result(Observable<String> titleMovie);
     }
 }
