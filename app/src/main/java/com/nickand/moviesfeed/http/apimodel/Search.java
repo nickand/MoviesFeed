@@ -4,7 +4,7 @@ package com.nickand.moviesfeed.http.apimodel;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Search {
+public class Search implements ResultDataInformation {
 
     @SerializedName("Title")
     @Expose
@@ -62,4 +62,8 @@ public class Search {
         this.poster = poster;
     }
 
+    @Override
+    public String getImage() {
+        return getPoster();
+    }
 }

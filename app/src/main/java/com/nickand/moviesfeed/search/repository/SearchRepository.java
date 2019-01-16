@@ -1,21 +1,18 @@
 package com.nickand.moviesfeed.search.repository;
 
 import com.nickand.moviesfeed.http.apimodel.OmdbApiSearch;
-import com.nickand.moviesfeed.http.apimodel.Result;
 import com.nickand.moviesfeed.http.apimodel.Search;
 import com.nickand.moviesfeed.http.services.MoviesSearchInfoApisService;
-import com.nickand.moviesfeed.model.ViewModel;
-import com.nickand.moviesfeed.repository.Repository;
+import com.nickand.moviesfeed.repository.RepositoryImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
-public class SearchRepository implements Repository {
+public class SearchRepository extends RepositoryImpl<Search> {
 
     private MoviesSearchInfoApisService moviesExtraInfoApisService;
 
@@ -43,52 +40,7 @@ public class SearchRepository implements Repository {
         return (System.currentTimeMillis() - lastTimestamp) < CACHE_LIFETIME;
     }
 
-    @Override
-    public Observable<Result> getResultFromNetwork() {
-        return null;
-    }
-
-    @Override
-    public Observable<Result> getResultFromCache() {
-        return null;
-    }
-
-    @Override
-    public Observable<Result> getResultData() {
-        return null;
-    }
-
-    @Override
-    public Observable<String> getCountryFromNetwork() {
-        return null;
-    }
-
-    @Override
-    public Observable<String> getCountryFromCache() {
-        return null;
-    }
-
-    @Override
-    public Observable<String> getCountryData() {
-        return null;
-    }
-
-    @Override
-    public Observable<String> getImageFromNetwork() {
-        return null;
-    }
-
-    @Override
-    public Observable<String> getImageFromCache() {
-        return null;
-    }
-
-    @Override
-    public Observable<String> getImageData() {
-        return null;
-    }
-
-    public Observable<Search> getTitleFromNetwork(String stringTitle) {
+    private Observable<Search> getTitleFromNetwork(String stringTitle) {
         Observable<OmdbApiSearch> movie = moviesExtraInfoApisService.getExtraInfoMovie(stringTitle);
         return movie.concatMap(new Function<OmdbApiSearch, Observable<Search>>() {
             @Override
@@ -105,10 +57,15 @@ public class SearchRepository implements Repository {
             public void accept(Search search) {
                 searchList.add(search);
             }
+        }).doOnError(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) {
+                throwable.printStackTrace();
+            }
         });
     }
 
-    public Observable<String> getImageDataByTitle(String titleMovie) {
+    private Observable<String> getImageByTitle(String titleMovie) {
         Observable<Search> movie = getTitleFromNetwork(titleMovie);
         return movie.concatMap(new Function<Search, Observable<String>>() {
             @Override
@@ -123,13 +80,18 @@ public class SearchRepository implements Repository {
         });
     }
 
-    public Observable<ViewModel> getMyShit(String titleMovie) {
-        return Observable.zip(getTitleFromNetwork(titleMovie), getImageDataByTitle(titleMovie),
-            new BiFunction<Search, String, ViewModel>() {
-                @Override
-                public ViewModel apply(Search search, String image) {
-                    return new ViewModel(search.getTitle(), "No country", image);
-                }
-            });
+    @Override
+    protected Observable<Search> getDataByTitle(String searchData) {
+        return getTitleFromNetwork(searchData);
+    }
+
+    @Override
+    protected Observable<String> getImageDataByTitle(String searchData) {
+        return getImageByTitle(searchData);
+    }
+
+    @Override
+    public Observable<String> getMovieCountryData() {
+        return Observable.just("No Country");
     }
 }

@@ -51,6 +51,7 @@ public class SearchFragment extends Fragment implements SearchMVP.View{
 
     private SearchListAdapter listAdapter;
     private List<ViewModel> resultList = new ArrayList<>();
+    private boolean actionSearch;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,7 +82,9 @@ public class SearchFragment extends Fragment implements SearchMVP.View{
         searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView text, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH && !actionSearch) {
+                    actionSearch = true;
+
                     if (resultList != null && listAdapter != null) {
                         resultList.clear();
                         listAdapter.notifyDataSetChanged();
@@ -89,6 +92,8 @@ public class SearchFragment extends Fragment implements SearchMVP.View{
 
                     presenter.loadDataByTitle(text.getText().toString());
                     return true;
+                } else {
+                    actionSearch = false;
                 }
                 return false;
             }

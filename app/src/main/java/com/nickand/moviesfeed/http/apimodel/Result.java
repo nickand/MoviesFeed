@@ -6,8 +6,9 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Result {
+public class Result implements ResultDataInformation {
 
+    public static final String REGEX_DOBLEDOT = ":";
     @SerializedName("vote_count")
     @Expose
     private Integer voteCount;
@@ -178,7 +179,19 @@ public class Result {
         return image;
     }
 
+    @Override
+    public String getYear() {
+        return releaseDate;
+    }
+
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public void fixTitle() {
+        if (title.contains(REGEX_DOBLEDOT)) {
+            String[] separated = title.split(REGEX_DOBLEDOT);
+            this.title = separated[0];
+        }
     }
 }

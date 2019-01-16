@@ -1,20 +1,11 @@
 package com.nickand.moviesfeed.repository;
 
-import com.nickand.moviesfeed.http.apimodel.Result;
+import com.nickand.moviesfeed.model.ViewModel;
 
 import io.reactivex.Observable;
 
 public interface Repository {
 
-    Observable<Result> getResultFromNetwork();
-    Observable<Result> getResultFromCache();
-    Observable<Result> getResultData();
-
-    Observable<String> getCountryFromNetwork();
-    Observable<String> getCountryFromCache();
-    Observable<String> getCountryData();
-
-    Observable<String> getImageFromNetwork();
-    Observable<String> getImageFromCache();
-    Observable<String> getImageData();
+    Observable<ViewModel> getDataResult();
+    Observable<ViewModel> getDataResult(String searchData);
 }

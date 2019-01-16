@@ -5,19 +5,17 @@ import com.nickand.moviesfeed.http.apimodel.Result;
 import com.nickand.moviesfeed.http.apimodel.TopMoviesRated;
 import com.nickand.moviesfeed.http.services.MoviesApiService;
 import com.nickand.moviesfeed.http.services.MoviesExtraInfoApisService;
-import com.nickand.moviesfeed.repository.Repository;
+import com.nickand.moviesfeed.repository.RepositoryImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 
-public class MoviesRepository implements Repository {
+public class MoviesRepository extends RepositoryImpl<Result> {
 
     private MoviesApiService moviesApiService;
     private MoviesExtraInfoApisService moviesExtraInfoApisService;
@@ -40,12 +38,11 @@ public class MoviesRepository implements Repository {
         this.images = new ArrayList<>();
     }
 
-    public boolean isUpdated() {
+    private boolean isUpdated() {
         return (System.currentTimeMillis() - lastTimestamp) < CACHE_LIFETIME;
     }
 
-    @Override
-    public Observable<Result> getResultFromNetwork() {
+    private Observable<Result> getResultFromNetwork() {
 
         Observable<TopMoviesRated> topMoviesRatedObservable =
             moviesApiService.getTopMoviesRated(1)
@@ -62,15 +59,7 @@ public class MoviesRepository implements Repository {
             .filter(new Predicate<Result>() {
                 @Override
                 public boolean test(Result result) {
-                    String currentString = result.getTitle();
-                    String[] separated = currentString.split(":");
-                    if (result.getTitle().startsWith("Black Mirror")) {
-                        result.setTitle(separated[0]);
-                    } else if (result.getTitle().startsWith("Sherlock")) {
-                        result.setTitle(separated[0]);
-                    } else if (result.getTitle().startsWith("Doctor Who")) {
-                        result.setTitle(separated[0]);
-                    }
+                    result.fixTitle();
                     return true;
                 }
             }).doOnNext(new Consumer<Result>() {
@@ -81,8 +70,7 @@ public class MoviesRepository implements Repository {
             });
     }
 
-    @Override
-    public Observable<Result> getResultFromCache() {
+    private Observable<Result> getResultFromCache() {
         if (isUpdated()) {
             return Observable.fromIterable(results);
         } else {
@@ -92,13 +80,11 @@ public class MoviesRepository implements Repository {
         }
     }
 
-    @Override
-    public Observable<Result> getResultData() {
+    private Observable<Result> getResultData() {
         return getResultFromCache().switchIfEmpty(getResultFromNetwork());
     }
 
-    @Override
-    public Observable<String> getCountryFromNetwork() {
+    private Observable<String> getCountryFromNetwork() {
         Observable<Result> movies = getResultFromNetwork();
         return movies.concatMap(new Function<Result, Observable<OmdbAPI>>() {
             @Override
@@ -122,8 +108,7 @@ public class MoviesRepository implements Repository {
             });
     }
 
-    @Override
-    public Observable<String> getCountryFromCache() {
+    private Observable<String> getCountryFromCache() {
         if (isUpdated()) {
             return Observable.fromIterable(countries);
         } else {
@@ -133,13 +118,11 @@ public class MoviesRepository implements Repository {
         }
     }
 
-    @Override
-    public Observable<String> getCountryData() {
+    private Observable<String> getCountryData() {
         return getCountryFromCache().switchIfEmpty(getCountryFromNetwork());
     }
 
-    @Override
-    public Observable<String> getImageFromNetwork() {
+    private Observable<String> getImageFromNetwork() {
         Observable<Result> movies = getResultFromNetwork();
         return movies.concatMap(new Function<Result, Observable<OmdbAPI>>() {
             @Override
@@ -163,8 +146,7 @@ public class MoviesRepository implements Repository {
         });
     }
 
-    @Override
-    public Observable<String> getImageFromCache() {
+    private Observable<String> getImageFromCache() {
         if (isUpdated()) {
             return Observable.fromIterable(images);
         } else {
@@ -174,8 +156,22 @@ public class MoviesRepository implements Repository {
         }
     }
 
-    @Override
     public Observable<String> getImageData() {
         return getImageFromCache().switchIfEmpty(getImageFromNetwork());
+    }
+
+    @Override
+    protected Observable<Result> getDataByTitle() {
+        return getResultData();
+    }
+
+    @Override
+    protected Observable<String> getImageDataByTitle() {
+        return getImageData();
+    }
+
+    @Override
+    public Observable<String> getMovieCountryData() {
+        return getCountryData();
     }
 }
