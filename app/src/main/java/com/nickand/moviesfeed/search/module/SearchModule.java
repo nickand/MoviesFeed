@@ -1,7 +1,5 @@
 package com.nickand.moviesfeed.search.module;
 
-import com.nickand.moviesfeed.http.services.MoviesApiService;
-import com.nickand.moviesfeed.http.services.MoviesExtraInfoApisService;
 import com.nickand.moviesfeed.http.services.MoviesSearchInfoApisService;
 import com.nickand.moviesfeed.search.mvp.SearchMVP;
 import com.nickand.moviesfeed.search.mvp.model.SearchModel;

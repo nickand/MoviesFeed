@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.nickand.moviesfeed.R;
 import com.nickand.moviesfeed.http.module.MovieExtraInfoApiModule;
+import com.nickand.moviesfeed.http.module.MovieSearchInfoApiModule;
 import com.nickand.moviesfeed.http.module.MovieTitleApiModule;
 import com.nickand.moviesfeed.movies.module.MoviesModule;
 import com.nickand.moviesfeed.search.module.SearchModule;
@@ -34,6 +35,7 @@ public class App extends Application {
             .movieTitleApiModule(new MovieTitleApiModule())
             .movieExtraInfoApiModule(new MovieExtraInfoApiModule())
             .searchModule(new SearchModule())
+            .movieSearchInfoApiModule(new MovieSearchInfoApiModule())
             .build();
     }
 

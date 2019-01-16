@@ -1,6 +1,5 @@
 package com.nickand.moviesfeed.http.services;
 
-import com.nickand.moviesfeed.http.apimodel.OmdbAPI;
 import com.nickand.moviesfeed.http.apimodel.OmdbApiSearch;
 
 import io.reactivex.Observable;

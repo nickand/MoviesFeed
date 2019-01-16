@@ -2,12 +2,13 @@ package com.nickand.moviesfeed.root;
 
 import com.nickand.moviesfeed.MainActivity;
 import com.nickand.moviesfeed.favorites.view.FavoriteFragment;
+import com.nickand.moviesfeed.http.module.MovieExtraInfoApiModule;
+import com.nickand.moviesfeed.http.module.MovieSearchInfoApiModule;
+import com.nickand.moviesfeed.http.module.MovieTitleApiModule;
+import com.nickand.moviesfeed.movies.module.MoviesModule;
 import com.nickand.moviesfeed.movies.view.HomeFragment;
 import com.nickand.moviesfeed.search.module.SearchModule;
 import com.nickand.moviesfeed.search.view.SearchFragment;
-import com.nickand.moviesfeed.http.module.MovieExtraInfoApiModule;
-import com.nickand.moviesfeed.http.module.MovieTitleApiModule;
-import com.nickand.moviesfeed.movies.module.MoviesModule;
 
 import javax.inject.Singleton;
 
@@ -19,7 +20,8 @@ import dagger.Component;
     MoviesModule.class,
     MovieTitleApiModule.class,
     MovieExtraInfoApiModule.class,
-    SearchModule.class})
+    SearchModule.class,
+    MovieSearchInfoApiModule.class})
 public interface ApplicationComponent {
     void inject(MainActivity mainActivity);
 

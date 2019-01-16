@@ -1,12 +1,8 @@
 package com.nickand.moviesfeed.search.repository;
 
-import com.nickand.moviesfeed.http.apimodel.OmdbAPI;
 import com.nickand.moviesfeed.http.apimodel.OmdbApiSearch;
 import com.nickand.moviesfeed.http.apimodel.Result;
 import com.nickand.moviesfeed.http.apimodel.Search;
-import com.nickand.moviesfeed.http.apimodel.TopMoviesRated;
-import com.nickand.moviesfeed.http.services.MoviesApiService;
-import com.nickand.moviesfeed.http.services.MoviesExtraInfoApisService;
 import com.nickand.moviesfeed.http.services.MoviesSearchInfoApisService;
 import com.nickand.moviesfeed.model.ViewModel;
 import com.nickand.moviesfeed.repository.Repository;
@@ -15,11 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
+import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Function3;
-import io.reactivex.functions.Predicate;
 
 public class SearchRepository implements Repository {
 
@@ -28,6 +22,7 @@ public class SearchRepository implements Repository {
     private String movieTitle;
     private String movieCountry;
     private String movieImage;
+    private List<Search> searchList;
     private long lastTimestamp;
 
     private static final long CACHE_LIFETIME = 20 * 1000;
@@ -40,6 +35,8 @@ public class SearchRepository implements Repository {
         movieTitle = "";
         movieCountry = "";
         movieImage = "";
+
+        searchList = new ArrayList<>();
     }
 
     public boolean isUpdated() {
@@ -103,15 +100,20 @@ public class SearchRepository implements Repository {
             public Observable<Search> apply(Search search) {
                 return Observable.just(search);
             }
+        }).doOnNext(new Consumer<Search>() {
+            @Override
+            public void accept(Search search) {
+                searchList.add(search);
+            }
         });
     }
 
     public Observable<String> getImageDataByTitle(String titleMovie) {
-        Observable<OmdbAPI> movie = moviesExtraInfoApisService.getExtraInfoMovie(titleMovie);
-        return movie.concatMap(new Function<OmdbAPI, Observable<String>>() {
+        Observable<Search> movie = getTitleFromNetwork(titleMovie);
+        return movie.concatMap(new Function<Search, Observable<String>>() {
             @Override
-            public Observable<String> apply(OmdbAPI omdbAPI) {
-                return Observable.just(omdbAPI.getPoster());
+            public Observable<String> apply(Search search) {
+                return Observable.just(search.getPoster());
             }
         }).doOnNext(new Consumer<String>() {
             @Override
@@ -122,11 +124,12 @@ public class SearchRepository implements Repository {
     }
 
     public Observable<ViewModel> getMyShit(String titleMovie) {
-        return Observable.zip(getTitleFromNetwork(titleMovie), getCountryDataByTitle(titleMovie), getImageDataByTitle(titleMovie), new Function3<String, String, String, ViewModel>() {
-            @Override
-            public ViewModel apply(String title, String country, String image) {
-                return new ViewModel(title, country, image);
-            }
-        });
+        return Observable.zip(getTitleFromNetwork(titleMovie), getImageDataByTitle(titleMovie),
+            new BiFunction<Search, String, ViewModel>() {
+                @Override
+                public ViewModel apply(Search search, String image) {
+                    return new ViewModel(search.getTitle(), "No country", image);
+                }
+            });
     }
 }
