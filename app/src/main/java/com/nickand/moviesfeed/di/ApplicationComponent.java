@@ -1,13 +1,13 @@
-package com.nickand.moviesfeed.root;
+package com.nickand.moviesfeed.di;
 
 import com.nickand.moviesfeed.MainActivity;
 import com.nickand.moviesfeed.favorites.view.FavoriteFragment;
-import com.nickand.moviesfeed.http.module.MovieExtraInfoApiModule;
-import com.nickand.moviesfeed.http.module.MovieSearchInfoApiModule;
-import com.nickand.moviesfeed.http.module.MovieTitleApiModule;
-import com.nickand.moviesfeed.movies.module.MoviesModule;
+import com.nickand.moviesfeed.http.di.MovieExtraInfoApiModule;
+import com.nickand.moviesfeed.http.di.MovieSearchInfoApiModule;
+import com.nickand.moviesfeed.http.di.MovieTitleApiModule;
+import com.nickand.moviesfeed.movies.di.MoviesModule;
 import com.nickand.moviesfeed.movies.view.HomeFragment;
-import com.nickand.moviesfeed.search.module.SearchModule;
+import com.nickand.moviesfeed.search.di.SearchModule;
 import com.nickand.moviesfeed.search.view.SearchFragment;
 
 import javax.inject.Singleton;

@@ -1,4 +1,4 @@
-package com.nickand.moviesfeed.http.module;
+package com.nickand.moviesfeed.http.di;
 
 import com.nickand.moviesfeed.http.services.MoviesExtraInfoApisService;
 

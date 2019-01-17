@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.nickand.moviesfeed.R;
 import com.nickand.moviesfeed.model.ViewModel;
-import com.nickand.moviesfeed.root.App;
+import com.nickand.moviesfeed.di.App;
 import com.nickand.moviesfeed.search.adapters.SearchListAdapter;
 import com.nickand.moviesfeed.search.mvp.SearchMVP;
 import com.nickand.moviesfeed.util.GridSpacingItemDecoration;
@@ -28,7 +28,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Observable;
 
 public class SearchFragment extends Fragment implements SearchMVP.View{
 
