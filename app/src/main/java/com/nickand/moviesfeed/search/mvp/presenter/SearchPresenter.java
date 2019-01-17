@@ -3,7 +3,6 @@ package com.nickand.moviesfeed.search.mvp.presenter;
 import com.nickand.moviesfeed.model.ViewModel;
 import com.nickand.moviesfeed.search.mvp.SearchMVP;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
@@ -22,6 +21,8 @@ public class SearchPresenter implements SearchMVP.Presenter {
 
     @Override
     public void loadDataByTitle(String title) {
+        view.showProgress(true);
+
         subscription = model.result(title)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -29,6 +30,7 @@ public class SearchPresenter implements SearchMVP.Presenter {
                 @Override
                 public void onNext(ViewModel viewModel) {
                     if (view != null) {
+                        view.showProgress(false);
                         view.updateData(viewModel);
                     }
                 }
@@ -37,6 +39,7 @@ public class SearchPresenter implements SearchMVP.Presenter {
                 public void onError(Throwable e) {
                     e.printStackTrace();
                     if (view != null) {
+                        view.showProgress(false);
                         view.showSnackbar("Download movie error");
                     }
                 }
@@ -44,7 +47,7 @@ public class SearchPresenter implements SearchMVP.Presenter {
                 @Override
                 public void onComplete() {
                     if (view != null) {
-                        view.showSnackbar("Movies loaded");
+                        view.showSnackbar("Search completed");
                     }
                 }
             });

@@ -45,7 +45,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListItemViewHo
         listItemViewHolder.itemName.setText(list.get(i).getTitle());
         listItemViewHolder.countryName.setText(list.get(i).getCountry());
         Glide.with(listItemViewHolder.itemImage.getContext())
-            .load(url.get(i).getUrlImage())
+            .load(url != null ? url.get(i).getUrlImage() : "")
             .transition(DrawableTransitionOptions.withCrossFade())
             .apply(new RequestOptions()
             .error(R.drawable.ic_error))

@@ -9,6 +9,7 @@ public interface MoviesMVP {
     interface View {
         void updateData(ViewModel viewModel);
         void showSnackbar(String message);
+        void showProgress(boolean isShow);
     }
 
     interface Presenter {

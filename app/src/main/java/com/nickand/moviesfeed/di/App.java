@@ -7,7 +7,6 @@ import com.nickand.moviesfeed.http.di.MovieExtraInfoApiModule;
 import com.nickand.moviesfeed.http.di.MovieSearchInfoApiModule;
 import com.nickand.moviesfeed.http.di.MovieTitleApiModule;
 import com.nickand.moviesfeed.movies.di.MoviesModule;
-import com.nickand.moviesfeed.root.DaggerApplicationComponent;
 import com.nickand.moviesfeed.search.di.SearchModule;
 
 import io.github.inflationx.calligraphy3.CalligraphyConfig;
