@@ -1,4 +1,4 @@
-package com.nickand.moviesfeed.search.module;
+package com.nickand.moviesfeed.search.di;
 
 import com.nickand.moviesfeed.http.services.MoviesSearchInfoApisService;
 import com.nickand.moviesfeed.search.mvp.SearchMVP;

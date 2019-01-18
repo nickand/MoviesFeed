@@ -30,6 +30,7 @@
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView">
 
+        <include layout="@layout/movie_progress_loader"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerViewMovies"

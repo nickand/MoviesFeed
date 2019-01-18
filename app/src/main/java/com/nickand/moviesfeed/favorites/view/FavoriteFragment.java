@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nickand.moviesfeed.R;
-import com.nickand.moviesfeed.root.App;
+import com.nickand.moviesfeed.di.App;
 
 import java.util.Objects;
 

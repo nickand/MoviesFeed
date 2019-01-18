@@ -1,4 +1,4 @@
-package com.nickand.moviesfeed.root;
+package com.nickand.moviesfeed.di;
 
 import android.app.Application;
 import android.content.Context;

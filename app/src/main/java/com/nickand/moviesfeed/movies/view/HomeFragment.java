@@ -1,5 +1,7 @@
 package com.nickand.moviesfeed.movies.view;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -10,12 +12,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.nickand.moviesfeed.R;
+import com.nickand.moviesfeed.di.App;
 import com.nickand.moviesfeed.model.ViewModel;
 import com.nickand.moviesfeed.movies.adapters.ListAdapter;
 import com.nickand.moviesfeed.movies.mvp.MoviesMVP;
-import com.nickand.moviesfeed.root.App;
 import com.nickand.moviesfeed.util.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
@@ -39,6 +43,9 @@ public class HomeFragment extends Fragment implements MoviesMVP.View {
 
     @BindView(R.id.placeSnackBar)
     ViewGroup placeSnackBar;
+
+    @BindView(R.id.animation_view)
+    LottieAnimationView lottieAnimationView;
 
     @Inject
     MoviesMVP.Presenter presenter;
@@ -84,6 +91,7 @@ public class HomeFragment extends Fragment implements MoviesMVP.View {
         presenter.rxUnsubscribe();
         resultList.clear();
         listAdapter.notifyDataSetChanged();
+        lottieAnimationView.clearAnimation();
     }
 
     @Override
@@ -98,5 +106,38 @@ public class HomeFragment extends Fragment implements MoviesMVP.View {
     @Override
     public void showSnackbar(String message) {
         Snackbar.make(placeSnackBar, message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showProgress(boolean isShow) {
+        if (isShow) {
+            // Set the content view to 0% opacity but visible, so that it is visible
+            // (but fully transparent) during the animation.
+            lottieAnimationView.setAlpha(0f);
+            lottieAnimationView.setVisibility(View.VISIBLE);
+
+            // Animate the content view to 100% opacity, and clear any animation
+            // listener set on the view.
+            lottieAnimationView.animate()
+                .alpha(1f)
+                .setDuration(800);
+            lottieAnimationView.setAnimation("json/movie_loader_coco.json");
+            lottieAnimationView.setRepeatCount(Animation.INFINITE);
+            lottieAnimationView.playAnimation();
+        } else {
+            // Animate the loading view to 0% opacity. After the animation ends,
+            // set its visibility to GONE as an optimization step (it won't
+            // participate in layout passes, etc.)
+            lottieAnimationView.animate()
+                .alpha(0f)
+                .setDuration(800)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        lottieAnimationView.setVisibility(View.GONE);
+                    }
+                });
+
+        }
     }
 }
