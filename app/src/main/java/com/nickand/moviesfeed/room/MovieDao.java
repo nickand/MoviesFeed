@@ -1,6 +1,7 @@
 package com.nickand.moviesfeed.room;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
@@ -16,6 +17,12 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 public interface MovieDao {
     @Insert(onConflict = REPLACE)
     void save(ViewModel viewModel);
+
+    @Delete
+    void delete(ViewModel viewModel);
+
+    @Query("DELETE FROM movies")
+    void deleteAllMovies();
 
     @Query("SELECT * FROM movies WHERE movie_id = :movieId")
     Observable<ViewModel> load(int movieId);
