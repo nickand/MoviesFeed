@@ -8,7 +8,7 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = "movies")
 public class ViewModel {
     @PrimaryKey
-    @ColumnInfo(name = "movieid")
+    @ColumnInfo(name = "movie_id")
     private String id;
     @ColumnInfo(name = "title")
     private String title;
