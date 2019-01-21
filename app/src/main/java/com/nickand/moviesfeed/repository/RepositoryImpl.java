@@ -34,7 +34,7 @@ public abstract class RepositoryImpl<T extends ResultDataInformation> implements
     }
 
     @Override
-    public void save(ViewModel viewModel) {
+    public void insert(ViewModel viewModel) {
 
     }
 

@@ -16,7 +16,7 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface MovieDao {
     @Insert(onConflict = REPLACE)
-    void save(ViewModel viewModel);
+    void insert(ViewModel viewModel);
 
     @Delete
     void delete(ViewModel viewModel);
