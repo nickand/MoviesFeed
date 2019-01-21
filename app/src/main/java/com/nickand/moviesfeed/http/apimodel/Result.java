@@ -1,11 +1,14 @@
 
 package com.nickand.moviesfeed.http.apimodel;
 
+import android.arch.persistence.room.Entity;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@Entity(tableName = "result")
 public class Result implements ResultDataInformation {
 
     public static final String REGEX_DOBLEDOT = ":";
