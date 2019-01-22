@@ -4,11 +4,13 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 @Entity(tableName = "movies")
 public class ViewModel {
     @PrimaryKey
     @ColumnInfo(name = "movie_id")
+    @NonNull
     private String id;
     @ColumnInfo(name = "title")
     private String title;
@@ -24,9 +26,9 @@ public class ViewModel {
         this.urlImage = urlImage;
     }
 
-    public ViewModel(String id, String data, String country, String urlImage) {
-        title = data;
+    public ViewModel(String id, String title, String country, String urlImage) {
         this.id = id;
+        this.title = title;
         this.country = country;
         this.urlImage = urlImage;
     }

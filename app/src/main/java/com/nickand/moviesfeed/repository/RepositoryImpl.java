@@ -7,6 +7,7 @@ import com.nickand.moviesfeed.room.MovieDao;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function3;
 
@@ -49,12 +50,12 @@ public abstract class RepositoryImpl<T extends ResultDataInformation> implements
     }
 
     @Override
-    public Observable<ViewModel> load(int movieId) {
+    public Single<ViewModel> load(int movieId) {
         return null;
     }
 
     @Override
-    public Observable<List<ViewModel>> getAllMovies() {
+    public Single<List<ViewModel>> getAllMovies() {
         return null;
     }
 

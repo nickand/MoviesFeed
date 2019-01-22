@@ -45,7 +45,13 @@ public class SearchRepository extends RepositoryImpl<Search> {
         return movie.concatMap(new Function<OmdbApiSearch, Observable<Search>>() {
             @Override
             public Observable<Search> apply(OmdbApiSearch omdbApiSearch) {
-                return Observable.fromIterable(omdbApiSearch.getSearch());
+                return Observable.fromIterable(omdbApiSearch.getSearch())
+                    .doOnError(new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) {
+                            throwable.printStackTrace();
+                        }
+                    });
             }
         }).concatMap(new Function<Search, Observable<Search>>() {
             @Override

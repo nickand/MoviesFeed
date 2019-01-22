@@ -147,7 +147,9 @@ public class SearchFragment extends Fragment implements SearchMVP.View{
 
     @Override
     public void showSnackbar(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        if (getActivity() != null) {
+            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

@@ -9,7 +9,7 @@ import com.nickand.moviesfeed.model.ViewModel;
 
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
@@ -25,8 +25,8 @@ public interface MovieDao {
     void deleteAllMovies();
 
     @Query("SELECT * FROM movies WHERE movie_id = :movieId")
-    Observable<ViewModel> load(int movieId);
+    Single<ViewModel> load(int movieId);
 
     @Query("SELECT * FROM movies ORDER BY movie_id DESC")
-    Observable<List<ViewModel>> getAllMovies();
+    Single<List<ViewModel>> getAllMovies();
 }
