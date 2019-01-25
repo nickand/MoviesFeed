@@ -42,7 +42,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Li
 
     @Override
     public void onBindViewHolder(@NonNull ListItemViewHolder listItemViewHolder, int i) {
-        listItemViewHolder.itemName.setText(list.get(i).getTitle());
+        listItemViewHolder.itemName.setText(list.get(i).getData());
         listItemViewHolder.countryName.setText(list.get(i).getCountry());
         Glide.with(listItemViewHolder.itemImage.getContext())
             .load(url.get(i).getUrlImage())

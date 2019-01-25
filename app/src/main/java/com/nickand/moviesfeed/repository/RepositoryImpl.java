@@ -2,16 +2,18 @@ package com.nickand.moviesfeed.repository;
 
 import com.nickand.moviesfeed.http.apimodel.ResultDataInformation;
 import com.nickand.moviesfeed.model.ViewModel;
-import com.nickand.moviesfeed.room.MovieDao;
+import com.nickand.moviesfeed.room.MovieDatabase;
 
-import java.util.List;
+import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function3;
 
-public abstract class RepositoryImpl<T extends ResultDataInformation> implements Repository, MovieDao {
+public abstract class RepositoryImpl<T extends ResultDataInformation> implements Repository {
+
+    @Inject
+    MovieDatabase movieDatabase;
 
     @Override
     public Observable<ViewModel> getDataResult() {
@@ -32,31 +34,6 @@ public abstract class RepositoryImpl<T extends ResultDataInformation> implements
                         return new ViewModel(resultDataInfo.getTitle(), "No country", image);
                     }
                 });
-    }
-
-    @Override
-    public void insert(ViewModel viewModel) {
-
-    }
-
-    @Override
-    public void delete(ViewModel viewModel) {
-
-    }
-
-    @Override
-    public void deleteAllMovies() {
-
-    }
-
-    @Override
-    public Single<ViewModel> load(int movieId) {
-        return null;
-    }
-
-    @Override
-    public Single<List<ViewModel>> getAllMovies() {
-        return null;
     }
 
     protected Observable<T> getDataByTitle() {

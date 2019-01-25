@@ -99,7 +99,7 @@ public class HomeFragment extends Fragment implements MoviesMVP.View {
         resultList.add(viewModel);
         listAdapter.setImages(resultList);
         listAdapter.notifyItemInserted(resultList.size() - 1);
-        Log.d(TAG, "New info: " + viewModel.getTitle());
+        Log.d(TAG, "New info: " + viewModel.getData());
         Log.d(TAG, "IMAGE: " + viewModel.getUrlImage());
     }
 

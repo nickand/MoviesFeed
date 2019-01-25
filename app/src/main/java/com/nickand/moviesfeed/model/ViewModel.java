@@ -2,51 +2,42 @@ package com.nickand.moviesfeed.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 @Entity(tableName = "movies")
 public class ViewModel {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "movie_id")
     @NonNull
-    private String id;
+    private int id;
     @ColumnInfo(name = "title")
-    private String title;
+    private String data;
     @ColumnInfo(name = "country")
     private String country;
     @ColumnInfo(name = "image")
     private String urlImage;
 
-    @Ignore
     public ViewModel(String data, String country, String urlImage) {
-        title = data;
+        this.data = data;
         this.country = country;
         this.urlImage = urlImage;
     }
 
-    public ViewModel(String id, String title, String country, String urlImage) {
-        this.id = id;
-        this.title = title;
-        this.country = country;
-        this.urlImage = urlImage;
-    }
-
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getData() {
+        return data;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setData(String data) {
+        this.data = data;
     }
 
     public String getCountry() {
