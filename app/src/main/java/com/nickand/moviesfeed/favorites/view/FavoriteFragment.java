@@ -8,13 +8,15 @@ import android.view.ViewGroup;
 
 import com.nickand.moviesfeed.R;
 import com.nickand.moviesfeed.di.App;
+import com.nickand.moviesfeed.favorites.mvp.FavoriteMVP;
+import com.nickand.moviesfeed.model.ViewModel;
 
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FavoriteFragment extends Fragment {
+public class FavoriteFragment extends Fragment implements FavoriteMVP.View {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String TAG = FavoriteFragment.class.getName();
@@ -73,5 +75,25 @@ public class FavoriteFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+    @Override
+    public void updateData(ViewModel viewModel) {
+
+    }
+
+    @Override
+    public void showSnackbar(String message) {
+
+    }
+
+    @Override
+    public void showFavorite(boolean isFavorite) {
+
+    }
+
+    @Override
+    public void showProgress(boolean isShow) {
+
     }
 }
